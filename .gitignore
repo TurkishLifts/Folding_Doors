@@ -1,0 +1,10 @@
+# Project place file
+/Folding_Doors.rbxlx
+
+# Roblox Studio lock files
+/*.rbxlx.lock
+/*.rbxl.lock
+
+sourcemap.json
+
+Packages/

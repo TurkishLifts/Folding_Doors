@@ -1,0 +1,8 @@
+[package]
+name = "turkishlifts/foldingdoors"
+version = "1.0.1"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+Janitor = "howmanysmall/janitor@1.4.1"
