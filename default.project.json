@@ -1,0 +1,23 @@
+{
+  "name": "ManualSwingDoors",
+  "tree": {
+    "$className": "DataModel",
+    "Workspace": {
+      "Elevator": {
+        "$className": "Model",
+        "Controller": {
+          "$className": "Script",
+          "Plugins": {
+              "$className": "Folder",
+            "Folding_Doors": {
+              "$path": "src",
+              "Dependencies": {
+                "$path": "Packages"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
