@@ -18,7 +18,7 @@ function module.init(controller : {})
 	local ConfigModule = script.Config
 	local TweenService = game:GetService("TweenService")
 	
-	if not ConfigModule then warn("Config Module not found!") return end
+	if not ConfigModule then warn("Config Module not found!"); return end
 	
 	local Config = require(ConfigModule)
 	
@@ -28,20 +28,21 @@ function module.init(controller : {})
 	)
 	local Janitor = JanitorModule.new()
 	
-	local Lift : Model = controller.Source
+	--local Lift : Model = controller.Source
 	local Car : Model = controller.Car
 	local Platform : BasePart = controller.Platform
 	local API: BindableEvent = controller.API
 	
 	local Folding_Doors : Model = Car:FindFirstChild("Folding_Doors")
 	
-	if not Folding_Doors then warn("Folding_Doors NOT found!") return end
+	if not Folding_Doors then warn("Folding_Doors NOT found!"); return end
 	
 	local function CreateWeld(Hoster : BasePart, Part0 : BasePart, Part1 : BasePart)
 		local weld = Instance.new("WeldConstraint",Hoster)
 		weld.Part0 = Part0
 		weld.Part1 = Part1
 	end
+
 	for _,Door : Model in ipairs(Folding_Doors:GetChildren()) do
 		if not Door:IsA("Model") then continue end
 
@@ -60,30 +61,30 @@ function module.init(controller : {})
 	end
 	
 	local Tweens : {Tween} = {}
-	
-	local function CancelTweens()
-		for _,Tween : Tween in ipairs(Tweens) do
-			Tween:Cancel()
-		end
-		Tweens = {}
-	end
-
-	local function PlayTweens()
-		for _,Tween : Tween in ipairs(Tweens) do
-			Tween:Play()
-		end
-	end
-	
-	local function ClearTweens()
-		Tweens = {}
-	end
+	local TWEEN_FUNCTIONS = {
+        CancelTweens = function()
+            for _,Tween : Tween in ipairs(Tweens) do
+                Tween:Cancel()
+            end
+            Tweens = {}
+        end,
+        PlayTweens = function()
+            for _,Tween : Tween in ipairs(Tweens) do
+                Tween:Play()
+            end
+        end,
+        ClearTweens = function()
+            Tweens = {}
+        end,
+    }
 	
 	local function OpenDoor()
 		task.wait(Config.Opening.Delay)
 		
 		if State.Status ~= "Closed" and State.Status ~= "Open" then
-			CancelTweens()
+			TWEEN_FUNCTIONS.CancelTweens()
 		end
+
 		State.Status = "Opening"
 		for _,Door : Model in ipairs(Folding_Doors:GetChildren()) do
 			if not Door:IsA("Model") then continue end
@@ -102,17 +103,20 @@ function module.init(controller : {})
 			table.insert(Tweens,TW)
 		end
 		
-		PlayTweens()
+		TWEEN_FUNCTIONS.PlayTweens()
 		
 		task.wait(Config.Opening.Time)
 		
 		if State.Status == "Opening" then
 			State.Status = "Open"
-			ClearTweens()
+			TWEEN_FUNCTIONS.ClearTweens()
 			
 			for _,v in ipairs(Folding_Doors:GetChildren()) do
 				for _,p in ipairs(v:GetDescendants()) do
-					if p:IsA("WeldConstraint") then if not p.Parent:IsA("BasePart") then continue end p.Parent.Anchored = true
+					if p:IsA("WeldConstraint") then
+                        if not p.Parent:IsA("BasePart") then continue end
+
+                        p.Parent.Anchored = true
 						p:Destroy()
 					end
 				end
@@ -124,7 +128,7 @@ function module.init(controller : {})
 	local function CloseDoor()
 		task.wait(Config.Closing.Delay)
 		if State.Status ~= "Closed" and State.Status ~= "Open" then
-			CancelTweens()
+			TWEEN_FUNCTIONS.CancelTweens()
 		end
 		State.Status = "Closing"
 		for _,Door : Model in ipairs(Folding_Doors:GetChildren()) do
@@ -141,7 +145,7 @@ function module.init(controller : {})
 			table.insert(Tweens,TW)
 		end
 		
-		PlayTweens()
+		TWEEN_FUNCTIONS.PlayTweens()
 		
 		task.wait(Config.Closing.Time)
 		
