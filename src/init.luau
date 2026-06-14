@@ -2,7 +2,7 @@
 
 	Folding Doors Support for ModuluxV2 by TurkishLifts
 
-			VERSION: v1.0.1 DATE:12/06/2026
+			VERSION: v1.0.2  DATE:14/06/2026
 
 ]]--
 
