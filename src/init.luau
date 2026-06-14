@@ -1,5 +1,3 @@
---!nocheck
-
 --[[
 
 	Folding Doors Support for ModuluxV2 by TurkishLifts
@@ -7,6 +5,8 @@
 			VERSION: v1.0.1 DATE:12/06/2026
 
 ]]--
+
+--!nocheck
 
 local module = {}
 
